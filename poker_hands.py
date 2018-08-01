@@ -90,7 +90,7 @@ def compare_high_card(p1_values, p2_values):
     p1_values_diff = set(p1_values)-set(p2_values)
     p2_values_diff = set(p2_values)-set(p1_values)
     # if there are differences
-    if len(p1_values):
+    if len(p1_values_diff):
         # check if playter 1 has highest
         if max(p1_values_diff) > max(p2_values_diff):
             return True
