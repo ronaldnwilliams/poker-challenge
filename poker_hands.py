@@ -39,7 +39,7 @@ hand_ranks = { 'high card' : 1, 'one pair' : 2, 'two pairs' : 3,
             'royal flush': 10 }
 # these are the hand ranks that need to be compared by high card
 # the rest are compared by pairs unless royal flush
-compare_by_high_card = [8,6,5,1]
+compare_by_high_card = [9,6,5,1]
 royal_flush_values = [10, 11, 12, 13, 14]
 
 # checks player 1 and player 2 hands
@@ -68,11 +68,11 @@ def check_p1_win(p1_hand, p2_hand):
         # if straight flush, flush, straight, or high card
         # compare highest cards
         elif p1_hand_rank[0] in compare_by_high_card:
-            compare_high_card(p1_hand_rank[1], p2_hand_rank[1])
+            return compare_high_card(p1_hand_rank[1], p2_hand_rank[1])
         # if four of a kind, full house, three of a kind, two pairs, or one pair
         # compare pairs
         else:
-            compare_pairs(p1_hand_rank[1:3], p2_hand_rank[1:3])
+            return compare_pairs(p1_hand_rank[1:3], p2_hand_rank[1:3])
         
 # function to check for same suit
 def check_same_suit(hand):
@@ -89,6 +89,7 @@ def compare_high_card(p1_values, p2_values):
     # get the differences between p1 and p2
     p1_values_diff = set(p1_values)-set(p2_values)
     p2_values_diff = set(p2_values)-set(p1_values)
+    
     # if there are differences
     if len(p1_values_diff):
         # check if playter 1 has highest
@@ -117,7 +118,7 @@ def compare_pairs(p1_value_pairs, p2_value_pairs):
         # if value of pairs is same like both queens 
         # then check rest of cards for high card
         else:
-            compare_high_card(p1_value_pairs[0], p2_value_pairs[0])
+            return compare_high_card(p1_value_pairs[0], p2_value_pairs[0])
     # if multiple pairs
     else:
         # make sure sorted 
@@ -130,7 +131,7 @@ def compare_pairs(p1_value_pairs, p2_value_pairs):
             return False
         # tied all pairs so get high card
         else:
-            compare_high_card(p1_value_pairs[0], p2_value_pairs[0])
+            return compare_high_card(p1_value_pairs[0], p2_value_pairs[0])
 
 # function for getting the value of a ranked hand
 def rank_player_hand(hand):
@@ -188,36 +189,51 @@ def rank_player_hand(hand):
                     print(hand)
                     print('straight')
                 return [hand_ranks['straight'], values]
+            # check three of a kind
             elif len(pairs) == 1 and pairs[0][1] == 3:
                 if print_mode:
                     print(hand)
                     print('three of a kind')
                 return [hand_ranks['three of a kind'], values, pairs]
+            # check two pairs
             elif len(pairs) == 2:
                 if print_mode:
                     print(hand)
                     print('two pairs')
                 return [hand_ranks['two pairs'], values, pairs]
+            # check one pair
             elif len(pairs) == 1:
                 if print_mode:
                     print(hand)
                     print('one pair')
                 return [hand_ranks['one pair'], values, pairs]
+            # else has to be high card
             else:
+                if print_mode:
+                    print(hand)
+                    print('high card')
                 return [hand_ranks['high card'], values]
 
 def game():
     p1_wins = 0
     p2_wins = 0
+    count = 1
     for hand in cards:
+        if print_mode:
+            print('Round {}: '.format(count))
+        count += 1
         p1_hand = hand[0:5]
         p2_hand = hand[5:10]
+        if print_mode:
+            print('p1 hand: {}'.format(p1_hand))
+            print('p2 hand: {}'.format(p2_hand))
         p1_won = check_p1_win(p1_hand, p2_hand)
         if p1_won:
             if print_mode:
                 print('p1 won\n')
             p1_wins += 1
-        elif not p1_won:
+        # TODO: looks weird
+        else:
             if print_mode:
                 print('p2 won\n')
             p2_wins += 1
