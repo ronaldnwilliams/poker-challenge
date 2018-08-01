@@ -36,3 +36,6 @@ You will need the following installed:
 `python3 poker_hands.py`  
 or  
 `python3 poker_hands.py --print_mode`  
+
+### Testing  
+`python3 test_poker_hands.py`  
